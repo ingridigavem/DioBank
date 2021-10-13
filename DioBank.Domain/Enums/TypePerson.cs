@@ -1,6 +1,6 @@
 namespace DioBank.Domain.Enums {
-    enum TypePerson {
-        Fisica = 1,
-        Juridica = 2
+    public enum TypePerson : int {
+        Natural = 1,
+        Legal = 2
     }
 }

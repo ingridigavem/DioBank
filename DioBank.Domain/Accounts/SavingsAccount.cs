@@ -8,16 +8,16 @@ namespace DioBank.Domain.Accounts {
 
         public override bool Withdrawal(double amount) {
             if (amount <= 0) return false;
+            if (amount > this.Balance) return false;
 
             Balance -= amount;
             return true;
         }
         public override void Transfer(double amount, Account destinationAccount) {
+            if (amount > this.Balance) return;
             this.Withdrawal(amount);
             destinationAccount.Deposit(amount);
 
         }
-
-
     }
 }

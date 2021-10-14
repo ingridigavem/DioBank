@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using DioBank.Domain.Accounts;
 using DioBank.Domain.Enums;
 
@@ -99,24 +100,68 @@ namespace DioBank.Application {
             } else if (type == 2) {
                 Console.WriteLine("Enter account fee (%):");
                 double fee = double.Parse(Console.ReadLine());
-                accountsList.Add(new CheckingAccount(holder: holder, number: number, typePerson: (TypePerson)typePerson, fee: fee));
+
+                Console.WriteLine("Enter credit limit:");
+                double creditLimit = double.Parse(Console.ReadLine());
+
+                accountsList.Add(new CheckingAccount(holder: holder, number: number, typePerson: (TypePerson)typePerson, fee: fee, creditLimit: creditLimit));
             }
 
         }
 
-        private static void Transfer() {
+        private static void Deposit() {
+            Console.WriteLine("Enter number account:");
+            int number = int.Parse(Console.ReadLine());
 
+            Console.WriteLine("How much do you want to deposit?");
+            double amount = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            var account = accountsList.Find(a => a.Number == number);
+            if (account.Deposit(amount: amount)) {
+                Console.WriteLine();
+                Console.WriteLine("Successful Desposit");
+                Console.WriteLine(account);
+            } else {
+                Console.WriteLine();
+                Console.WriteLine("Sorry, wrong value. You can only type positive numbers");
+            }
         }
 
         private static void Withdrawal() {
+            Console.WriteLine("Enter number account:");
+            int number = int.Parse(Console.ReadLine());
 
+            Console.WriteLine("How much do you need?");
+            double amount = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            var account = accountsList.Find(a => a.Number == number);
+            if (account.Withdrawal(amount: amount)) {
+                Console.WriteLine();
+                Console.WriteLine("Successful withdrawal");
+                Console.WriteLine(account);
+            } else {
+                Console.WriteLine();
+                Console.WriteLine("Insufficient balance");
+            }
         }
 
-        private static void Deposit() {
+        private static void Transfer() {
+            Console.WriteLine("Enter your number account:");
+            int number = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter destination number account:");
+            int numberDestination = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("How much do you want to transfer?");
+            double amount = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            var account = accountsList.Find(a => a.Number == number);
+            var destinationAccount = accountsList.Find(ad => ad.Number == numberDestination);
+
+            account.Transfer(amount: amount, destinationAccount: destinationAccount);
+
+            Console.WriteLine(account);
 
         }
-
-
-
     }
 }
